@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { BsSendFill } from "react-icons/bs";
 
-import { FiPlus } from "react-icons/fi";
+// import { FiPlus } from "react-icons/fi";
 
 interface ChatMessage {
   userMessage: string;
