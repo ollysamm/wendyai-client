@@ -23,7 +23,7 @@ function Chat() {
     setIsThinking(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/ask-wendy', { prompt: userMessage });
+      const response = await axios.post('https://wendyai-server-production.up.railway.app/ask-wendy', { prompt: userMessage });
       setWendyResponse(response.data);
 
     } catch (error) {
