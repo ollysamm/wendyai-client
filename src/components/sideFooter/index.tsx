@@ -17,23 +17,23 @@ export function SideFooter() {
   return (
     <div className="flex flex-col">
       <div className="mb-2">
-        <a href="" className="flex items-center cursor-pointer">
+        <a href="http://support.wendyai.ollysamm.com" target="_blank" className="flex items-center cursor-pointer">
           <MdOutlineContactSupport />
-          <span className="ml-2 text-lg">Support</span>
+          <span className="ml-2 text-lg"><h2>Support</h2></span>
         </a>
       </div>
 
       <div className="mb-2">
         <a href="" className="flex items-center cursor-pointer">
           <FiSettings />
-          <span className="ml-2 text-lg">Account</span>
+          <span className="ml-2 text-lg"><h2>Account</h2></span>
         </a>
       </div>
 
       <div className="mb-2">
         <button onClick={handleLogout} className="flex items-center cursor-pointer">
           <CgLogOut />
-          <span className="ml-2 text-lg">Logout</span>
+          <span className="ml-2 text-lg"><h2>Logout</h2></span>
         </button>
       </div>
     </div>

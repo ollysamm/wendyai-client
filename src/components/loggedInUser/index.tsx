@@ -10,11 +10,25 @@ export function LoggedInUser() {
 
   return (
     <div className="flex items-center mb-6">
-      <img src={user.picture} alt={user.name} width={40} height={40} />
+      <img src={user.picture} alt={user.name} width={40} height={40} className="avatar"/>
       <div className="ml-2">
-        <div>{user.name}</div>
-        <div>Company_B</div>
+        <div><h1>{user.name}</h1></div>
+        <div><h3>Demo Company</h3></div>
       </div>
+    </div>
+  );
+}
+
+export function UserAvatar() {
+  const { user, isAuthenticated } = useAuth0();
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
+
+  return (
+    <div >
+      <img src={user.picture} alt={user.name} width={40} height={40} className="avatar"/>
     </div>
   );
 }
