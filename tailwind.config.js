@@ -93,6 +93,13 @@ module.exports = {
 					blue: '#35A3CF',
 					pink: '#E052B8'
 				},
+				adobe: {
+					navy: {
+						DEFAULT: '#2C3B59',
+						dark: '#1F2A40',
+					}, 
+					
+				},
 				ringColor: {
 					default: '#7965B2'
 				},
@@ -103,7 +110,7 @@ module.exports = {
 					'sofia-bold': ['SofiaPro-Bold', 'sans-serif'],
 					'sofia-regular': ['SofiaPro-Regular', 'sans-serif'],
 					'sofia-light': ['SofiaPro-Light', 'sans-serif'],
-					'new-spirit': ['new-spirit', 'serif']
+					'rooney-sans': ['rooney-sans', 'sans-serif']
 				},
 				fontSize: {
 					xxs: ['0.5rem', { lineHeight: '1.5' }],

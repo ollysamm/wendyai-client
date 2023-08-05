@@ -1,58 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import { BsSendFill } from "react-icons/bs";
 
-import { FiPlus } from "react-icons/fi";
+import { ChatContext, Message } from '../context/chatsContext';
 
-interface ChatMessage {
-  userMessage: string;
-  wendyResponse: string;
-  chatTopic: string;
-}
+import { UserAvatar } from '../components/loggedInUser';
+
+import logoImage from "../assets/img/wendy.png";
+
 
 function Chat() {
   const [userMessage, setUserMessage] = useState('');
   const [wendyResponse, setWendyResponse] = useState<string | null>(null);
+  const [lastResponseTime, setLastResponseTime] = useState<Date>(new Date())
   const [isThinking, setIsThinking] = useState(false);
-  const [chats, setChats] = useState<ChatMessage[]>([]);
-  const [chatTopic, setChatTopic] = useState('');
+  //const [chats, setChats] = useState<ChatMessage[]>([]);
+  //const [chatTopic, setChatTopic] = useState('');
+  const { currentChat, updateChat} = useContext(ChatContext)
   
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!userMessage) return;
     setIsThinking(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/ask-wendy', { prompt: userMessage });
+      const response = await axios.post('https://wendyai-server-production.up.railway.app/ask-wendy', { prompt: userMessage });
       setWendyResponse(response.data);
-
+      setLastResponseTime(new Date())
     } catch (error) {
       console.log(error);
     } finally {
       setIsThinking(false);
-      //setUserMessage(''); // Clear the input field after submission
     }
   };
 
   useEffect(() => {
-    const newChatMessage: ChatMessage = {
+    const newChatMessage: Message = {
       userMessage,
       wendyResponse: wendyResponse || '',
-      chatTopic,
     };
-    if (!chatTopic && userMessage && wendyResponse) {
-      setChatTopic(userMessage)
-    }
-    if (chatTopic && userMessage && wendyResponse) {
-      setChats(chats => (
-        [...chats, newChatMessage]
-      ))
+    console.log("Got response")
+    if (userMessage && wendyResponse) {
+      updateChat(newChatMessage)
+      setUserMessage('')
     } 
-  }, [wendyResponse, chatTopic])
-
-  console.log(wendyResponse, chatTopic)
-
-
+  }, [lastResponseTime])
 
   return (
     <div className="flex flex-col justify-between h-full overflow-auto pl-4 xl:pl-24 pr-4 xl:pr-24">
@@ -60,43 +53,43 @@ function Chat() {
 
       <div>
         <div>
-          {chats.map((chat, index) => (
+          {currentChat.messages?.map((chat, index) => (
             <div key={index}>
-              <div className='flex justify-end'>
-                <div className='bg-hol-purple-dark text-hol-grey-light text-sm  max-w-[85%] rounded-[32px_32px_0px_32px] mb-2 px-2 py-2'>
-                  {chat.userMessage}
-                </div>
+              <div className='flex justify-end items-center'>
+                <div className="prompt-bubble">
+                  <div className='prompttext'><p>{chat.userMessage}</p></ div>
+                  </div>
+                  <UserAvatar />
               </div>
-              <div className='flex justify-start'>
-                <div className='bg-hol-purple-light text-sm max-w-[85%] rounded-[0px_32px_32px_32px] mb-2 px-2 py-2'>
-                  {chat.wendyResponse}
+              <div className='flex justify-start items-center'>
+                <img src={logoImage} alt="Logo" className="avatar" />
+              <div className="response-bubble">
+                  <div className='responsetext'><p>{chat.wendyResponse}</p></ div>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="w-full sticky bottom-0 bg-hol-grey-light pt-4 pb-4">
+        <div className="w-full sticky bottom-0 bg-transparent pt-4 pb-4">
           {isThinking ? (
             <div className='mb-2'>
-              <p className="animate-pulse">
-                <i>Thinking...</i>
-              </p>
+              <div className="animate-pulse">
+                <img src={logoImage} alt="Logo" className="avatar" />
+              </div>
             </div>
           ) : (
             ""
           )}
 
           <div className="flex items-center justify-center mb-2">
-            <form onSubmit={handleSubmit} className='flex w-full bg-hol-grey border border-hol-purple-dark rounded-md'>
-              <input type='text' placeholder="Ask Wendy..." value={userMessage} onChange={(e) => setUserMessage(e.target.value)} className='bg-hol-grey w-full text-sm text-hol-grey-light p-2 rounded-md focus:outline-none'/>
-              <button type="submit" className='text-hol-grey-light p-2 pr-4'><BsSendFill /></button>
+            <form onSubmit={handleSubmit} className='submit flex w-full bg-adobe-navy border'>
+              <input type='text'  placeholder="Ask Wendy..." value={userMessage} onChange={(e) => setUserMessage(e.target.value)} className='bg-adobe-navy w-full text-sm text-white  focus:outline-none '/>
+              <button type="submit" className='submit text-white p-2 pr-4'><BsSendFill /></button>
             </form>
           </div>
 
-          <div className="flex items-center justify-center">
-            <h4 className='text-sm font-bold'>Wendy v1 - Updated 09/06/2023</h4>
-          </div>
+
         </div>
       </div>
 
